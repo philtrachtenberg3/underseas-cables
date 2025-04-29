@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# SQLite database
+cables.db
+
+# Virtual environment
+env/
+venv/
+
+# VSCode or other IDE metadata
+.vscode/
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
