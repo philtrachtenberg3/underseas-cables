@@ -44,6 +44,23 @@ def build_cable_landing_map(cables, landing_points, threshold_km=10):
 
     return matches
 
+def split_location(landing_point):
+    parts = [p.strip() for p in landing_point.split(',')]
+
+    if len(parts) == 3 and parts[2] == "United States":
+        city, state, country = parts
+    elif len(parts) >= 2:
+        city = ', '.join(parts[:-1])
+        state = ''
+        country = parts[-1]
+    else:
+        city = landing_point.strip()
+        state = ''
+        country = ''
+    
+    return city, state, country
+
+
 def parse_and_store(cables, landing_points):
     matches = build_cable_landing_map(cables, landing_points)
 
@@ -53,9 +70,12 @@ def parse_and_store(cables, landing_points):
         # check for duplicates
         c.execute('''
         CREATE TABLE IF NOT EXISTS cables (
-        name TEXT,
-        landing_point TEXT,
-        UNIQUE(name, landing_point)
+            name TEXT,
+            landing_point TEXT,
+            city TEXT,
+            state TEXT,
+            country TEXT,
+            UNIQUE(name, landing_point)
         )
         ''')
         conn.commit()
@@ -65,7 +85,8 @@ def parse_and_store(cables, landing_points):
 
     for cable, location in matches:
         # don't insert duplicate records
-        c.execute('INSERT OR IGNORE INTO cables (name, landing_point) VALUES (?, ?)', (cable, location))
+        city, state, country = split_location(location)
+        c.execute('INSERT OR IGNORE INTO cables (name, landing_point, city, state, country) VALUES (?, ?, ?, ?, ?)', (cable, location, city, state, country))
 
     conn.commit()
     conn.close()
