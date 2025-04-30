@@ -47,7 +47,7 @@ def build_cable_landing_map(cables, landing_points, threshold_km=10):
 def split_location(landing_point):
     parts = [p.strip() for p in landing_point.split(',')]
 
-    if len(parts) == 3 and parts[2] == "United States":
+    if len(parts) == 3 and parts[2] in {"United States", "Australia"}:
         city, state, country = parts
     elif len(parts) >= 2:
         city = ', '.join(parts[:-1])

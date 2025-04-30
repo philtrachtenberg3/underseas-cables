@@ -6,11 +6,11 @@ def view_cables():
 
 
     # Fetch entries
-    c.execute('SELECT name, city, state, country FROM cables ORDER BY name')
+    c.execute('SELECT name, city, state, country FROM cables ORDER BY country')
     rows = c.fetchall()
 
     for row in rows:
-        print(f"Cable: {row[0]} | City: {row[1]} | State (US-only): {row[2]} | Country: {row[3]}")
+        print(f"Cable: {row[0]} | City: {row[1]} | State (US/AU-only): {row[2]} | Country: {row[3]}")
 
     # check count of records in table
     c.execute('SELECT COUNT(*) FROM cables')
