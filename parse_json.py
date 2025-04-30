@@ -50,14 +50,22 @@ def parse_and_store(cables, landing_points):
     if not os.path.exists('cables.db'):
         conn = sqlite3.connect('cables.db')
         c = conn.cursor()
-        c.execute('CREATE TABLE cables (name TEXT, landing_point TEXT)')
+        # check for duplicates
+        c.execute('''
+        CREATE TABLE IF NOT EXISTS cables (
+        name TEXT,
+        landing_point TEXT,
+        UNIQUE(name, landing_point)
+        )
+        ''')
         conn.commit()
     else:
         conn = sqlite3.connect('cables.db')
         c = conn.cursor()
 
     for cable, location in matches:
-        c.execute('INSERT INTO cables (name, landing_point) VALUES (?, ?)', (cable, location))
+        # don't insert duplicate records
+        c.execute('INSERT OR IGNORE INTO cables (name, landing_point) VALUES (?, ?)', (cable, location))
 
     conn.commit()
     conn.close()
