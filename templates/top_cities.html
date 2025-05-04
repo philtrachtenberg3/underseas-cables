@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Top Cities by Number of Cables</h2>
+<ul>
+    {% for row in cities %}
+    <li>{{ row['city'] }}, {{ row['country'] }} — {{ row['cable_count'] }} cables</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Top Country-to-Country Connections</h2>
+<ul>
+    {% for pair, count in pairs %}
+    <li>{{ pair[0] }} <-> {{ pair[1] }} — {{ count }} cables</li>
+    {% endfor %}
+</ul>
+{% endblock %}
